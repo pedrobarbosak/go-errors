@@ -1,6 +1,7 @@
 package errors
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"runtime"
@@ -21,6 +22,38 @@ func (err *Error) Error() string {
 
 func (err *Error) String() string {
 	return fmt.Sprintf("%s:%d @ fn:%s # %s", err.file, err.line, err.fn, err.msg)
+}
+
+func (err *Error) As(target any) bool {
+	return errors.As(err, target)
+}
+
+func (err *Error) Is(target error) bool {
+	return errors.Is(err, target)
+}
+
+func (err *Error) Unwrap() error {
+	return errors.Unwrap(err)
+}
+
+func (err *Error) Join(errs ...error) error {
+	return errors.Join(append([]error{err}, errs...)...)
+}
+
+func As(err error, target any) bool {
+	return errors.As(err, target)
+}
+
+func Is(err, target error) bool {
+	return errors.Is(err, target)
+}
+
+func Unwrap(err error) error {
+	return errors.Unwrap(err)
+}
+
+func Join(errs ...error) error {
+	return errors.Join(errs...)
 }
 
 func New(args ...any) error {
